@@ -5,9 +5,13 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 builder.Services.AddRazorPages();
 
-builder.Services.AddDbContext<GameStoreContext>(options =>
-	 options.UseSqlite(builder.Configuration.GetConnectionString("GameStoreContext")));
+var serverVersion = new MariaDbServerVersion(new Version(10, 4, 22));
+var connectionString = builder.Configuration.GetConnectionString("GameStoreContext");
 
+
+builder.Services.AddDbContext<GameStoreContext>(options =>
+	 options.UseMySql(connectionString, serverVersion)
+);
 
 
 var app = builder.Build();
